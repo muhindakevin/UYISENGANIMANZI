@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UYISENGA NI IMANZI</title>
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <img src="images/logo.png" onclick="showTab('home')">
+    </div>
+    <nav>
+        <ul>
+            <li onclick="showTab('home')">Home</li>
+            <li class="menu-dropdown" id="aboutMenu">
+                <button type="button" class="menu-dropdown-toggle" onclick="toggleAboutMenu(event)">
+                    About Us <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <ul class="menu-dropdown-list">
+                    <li onclick="openAboutSection('identity')">Our Identity</li>
+                    <li onclick="openAboutSection('teams')">Our Teams</li>
+                    <li onclick="openAboutSection('board')">Board Members</li>
+                </ul>
+            </li>
+            <li class="menu-dropdown" id="programsMenu">
+                <button type="button" class="menu-dropdown-toggle" onclick="toggleProgramsMenu(event)">
+                    Our Programs <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <ul class="menu-dropdown-list">
+                    <li onclick="openProgramSection('child')">Child Protection</li>
+                    <li onclick="openProgramSection('mental')">Mental Health</li>
+                    <li onclick="openProgramSection('economic')">Economic Empowerment</li>
+                </ul>
+            </li>
+            <li onclick="showTab('news')">News</li>
+            <li onclick="showTab('gallery')">Gallery</li>
+            <li onclick="showTab('contact')">Contact Us</li>
+            <li class="donate-btn" onclick="showTab('donate')">DONATE</li>
+        </ul>
+    </nav>
+</header>
+
+<!-- ================= HOME ================= -->
+<section id="home" class="tab active">
+    <div class="hero-slider">
+        <div class="hero-content">
+            <h1 class="hero-brand">UYISENGANIMANZI</h1>
+            <p class="hero-programs-label">Our Programs</p>
+
+            <div class="hero-programs">
+                <div class="program-card home-program-card" data-program-id="child">
+                    <h2>Child Protection</h2>
+                    <p>Holistic well-being, protection, and education for children and families.</p>
+                </div>
+                <div class="program-card home-program-card" data-program-id="mental">
+                    <h2>Mental Health</h2>
+                    <p>Awareness, healing, training, and community resilience.</p>
+                </div>
+                <div class="program-card home-program-card" data-program-id="economic">
+                    <h2>Economic Empowerment</h2>
+                    <p>Skills, literacy, and mentorship in Rwamagana &amp; Rubavu.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= PARTNERS ================= -->
+    <div class="partners">
+        <h2>Our Partners</h2>
+        <div class="partner-logos">
+            <img src="images/partners/p1.png" alt="Partner 1">
+            <img src="images/partners/p2.png" alt="Partner 2">
+            <img src="images/partners/p3.png" alt="Partner 3">
+        </div>
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>About UNM</h3>
+                <p>We work in child protection, mental health, and economic empowerment.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Reach Us</h3>
+                <p>📧 info@uyisenganimanzi.org.rw</p>
+                <p>📞 +250788729994</p>
+                <p>📍 Kigali, Rwanda</p>
+            </div>
+            <div class="footer-col">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a id="socialX" href="https://x.com/UyisenganImanzi" target="_blank" rel="noopener noreferrer" aria-label="X"><i class="fab fa-x-twitter"></i></a>
+                    <a id="socialInstagram" href="https://www.instagram.com/uyisenganimanzi_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a id="socialLinkedIn" href="https://www.linkedin.com/in/uyisenga-ni-imanzi-b8820a97/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a id="socialFacebook" href="https://web.facebook.com/uyisenganimanzi" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                </div>
+                <a class="footer-admin-login" href="admin.html">LOGIN</a>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2026 UYISENGA NI IMANZI. All Rights Reserved.
+        </div>
+    </footer>
+</section>
+
+<!-- ================= OUR IDENTITY ================= -->
+<section id="identity" class="tab">
+    <div class="identity-wrapper">
+        <div class="identity-photo-panel">
+            <div class="identity-photo-frame">
+                <img id="identityPhotoPreview" class="identity-photo" alt="Our Identity Photo">
+                <div id="identityPhotoPlaceholder" class="identity-photo-placeholder">
+                    <i class="fa-solid fa-image"></i>
+                    <p>Identity photo will appear here after admin upload from dashboard.</p>
+                </div>
+            </div>
+        </div>
+        <div class="identity-content">
+            <h1>Our Identity</h1>
+            <p>Uyisenga Ni Imanzi (UNM) is a Rwandan non-profit organization founded in 2002 by five philanthropists to support orphan-headed households, children affected by the 1994 Genocide against the Tutsi, HIV/AIDS, and young girls who experienced violence. In the aftermath of the genocide, many children were left without parents, forced to care for their siblings while facing deep emotional trauma, poverty, and social isolation. UNM began by offering essential services, including education, medical care, shelter, and income-generating activities, to help these vulnerable youth rebuild their lives and later psychosocial support after recognize deep trauma among its beneficiaries in 2004.</p>
+            <p>Since its inception, UNM has broadened its mission to address the needs of vulnerable populations across Rwanda, with particular focus on Economic empowerment, Child protection, and Mental health. It operates in the following districts: Gasabo, Nyarugenge, Kicukiro, Rwamagana, Kayonza, Nyagatare, Huye, Nyaruguru, and Rubavu.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ================= OUR TEAMS ================= -->
+<section id="teams" class="tab">
+    <div class="content-center">
+        <h1>Our Teams</h1>
+        <p>Our dedicated teams serve children and families through protection, healing, and empowerment initiatives.</p>
+        <div class="team-members-grid" id="teamMembersGrid"></div>
+    </div>
+</section>
+
+<!-- ================= BOARD MEMBERS ================= -->
+<section id="board" class="tab">
+    <div class="content-center">
+        <h1>Board Members</h1>
+        <p>Our board members provide strategic leadership and stewardship to strengthen the mission and long-term impact of UYISENGA NI IMANZI.</p>
+    </div>
+</section>
+
+<!-- ================= PROGRAMS ================= -->
+<section id="programs" class="tab">
+    <div class="programs-wrapper">
+        <h1>Our Programs</h1>
+        <p id="programsSubtitle">Programs are managed by admin.</p>
+        <div class="programs-grid" id="programsGrid"></div>
+    </div>
+</section>
+
+<!-- ================= NEWS ================= -->
+<section id="news" class="tab">
+    <div class="programs-wrapper">
+        <h1>News</h1>
+        <p>Latest articles from our programs.</p>
+        <div class="news-filter" id="newsFilter"></div>
+        <div class="news-list" id="newsList"></div>
+    </div>
+</section>
+
+<!-- ================= GALLERY ================= -->
+<section id="gallery" class="tab">
+    <div class="content-center">
+        <h1>Gallery</h1>
+        <p>Gallery items can be managed by admin in future updates.</p>
+    </div>
+</section>
+
+<!-- ================= DONATE ================= -->
+<section id="donate" class="tab">
+    <div class="content-center">
+        <h1>Donate</h1>
+        <p>Your support helps us serve vulnerable children and families across Rwanda.</p>
+        <a class="primary-donate-btn" href="#contact" onclick="showTab('contact')">Talk to us first</a>
+    </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section id="contact" class="tab">
+    <div class="contact-wrapper">
+        <div class="contact-intro">
+            <h1>Contact Us</h1>
+            <p>We would love to hear from you. Reach out about partnerships, programs, or support.</p>
+
+            <div class="contact-cards">
+                <div class="contact-card">
+                    <h2><i class="fa-solid fa-location-dot"></i> Address</h2>
+                    <p>Kigali, Rwanda</p>
+                </div>
+                <div class="contact-card">
+                    <h2><i class="fa-solid fa-envelope"></i> Email</h2>
+                    <p>info@uyisenganimanzi.org.rw</p>
+                </div>
+                <div class="contact-card">
+                    <h2><i class="fa-solid fa-phone"></i> Phone</h2>
+                    <p>+250 788 729 994</p>
+                </div>
+            </div>
+
+            <div class="contact-donate-note">
+                <p>You can also support our work directly.</p>
+                <button class="primary-donate-btn" onclick="showTab('donate')">DONATE</button>
+            </div>
+        </div>
+
+        <div class="contact-form-panel">
+            <h2>Send us a message</h2>
+            <form class="contact-form" action="#" method="post">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" placeholder="Your full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="you@example.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" placeholder="How can we help?">
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" placeholder="Write your message here"></textarea>
+                </div>
+                <button type="submit" class="contact-submit-btn">Send Message</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNM Admin Dashboard</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<div class="dashboard-shell">
+    <header class="dashboard-header">
+        <h1>UNM Content Dashboard</h1>
+        <p>Admin manages all content, writer manages articles.</p>
+        <div id="statusBanner" class="status-banner"></div>
+    </header>
+
+    <div class="layout" id="layoutRoot">
+        <aside class="card" id="loginCard">
+            <h2>Login</h2>
+            <label for="username">Username</label>
+            <input id="username" placeholder="admin or writer">
+            <label for="password">Password</label>
+            <input id="password" type="password" placeholder="Enter password">
+            <button id="loginBtn" class="btn btn-primary">Login</button>
+            <p class="meta-sub">Default users: admin/admin123, writer/writer123</p>
+        </aside>
+
+        <main id="panel" class="hidden panel-grid">
+            <section class="card panel-card">
+                <h2>Identity (Admin)</h2>
+                <div class="quick-grid">
+                    <div>
+                        <label for="identityTitle">Title</label>
+                        <input id="identityTitle" placeholder="Identity title">
+                    </div>
+                    <div class="media-field">
+                        <label for="identityPhotoFile">Identity Photo (choose file)</label>
+                        <input id="identityPhotoFile" type="file" accept="image/*">
+                        <img id="identityPhotoPreviewAdmin" class="photo-preview" alt="Identity preview">
+                    </div>
+                </div>
+                <label for="identityP1">Paragraph 1</label>
+                <textarea id="identityP1" rows="4" placeholder="Paragraph 1"></textarea>
+                <label for="identityP2">Paragraph 2</label>
+                <textarea id="identityP2" rows="4" placeholder="Paragraph 2"></textarea>
+                <button id="saveIdentity" class="btn btn-primary">Save Identity</button>
+            </section>
+
+            <section class="card panel-card">
+                <h2>Programs (Admin)</h2>
+                <div class="quick-grid">
+                    <div>
+                        <label for="programId">Program ID</label>
+                        <input id="programId" placeholder="example: child">
+                    </div>
+                    <div>
+                        <label for="programName">Program Name</label>
+                        <input id="programName" placeholder="Program name">
+                    </div>
+                    <div>
+                        <label for="programDesc">Program Description</label>
+                        <input id="programDesc" placeholder="Program description">
+                    </div>
+                </div>
+                <button id="addProgram" class="btn btn-primary">Add Program</button>
+                <div id="programList" class="list"></div>
+            </section>
+
+            <section class="card panel-card panel-wide">
+                <h2>News Articles (Admin/Writer)</h2>
+                <div class="quick-grid">
+                    <div>
+                        <label for="newsTitle">Title</label>
+                        <input id="newsTitle" placeholder="News title">
+                    </div>
+                    <div>
+                        <label for="newsDate">Date</label>
+                        <input id="newsDate" type="date">
+                    </div>
+                    <div>
+                        <label for="newsProgram">Program Category</label>
+                        <select id="newsProgram"></select>
+                    </div>
+                </div>
+                <label for="newsContent">Content</label>
+                <textarea id="newsContent" rows="4" placeholder="Article content"></textarea>
+                <button id="addNews" class="btn btn-primary">Add Article</button>
+                <div id="newsListAdmin" class="list"></div>
+            </section>
+
+            <section class="card panel-card">
+                <h2>Team Members (Admin)</h2>
+                <div class="quick-grid">
+                    <div>
+                        <label for="teamName">Name</label>
+                        <input id="teamName" placeholder="Name">
+                    </div>
+                    <div>
+                        <label for="teamTitle">Title</label>
+                        <input id="teamTitle" placeholder="Title">
+                    </div>
+                    <div>
+                        <label for="teamContact">Contact</label>
+                        <input id="teamContact" placeholder="Phone or email">
+                    </div>
+                    <div class="media-field">
+                        <label for="teamPhotoFile">Member Photo (choose file)</label>
+                        <input id="teamPhotoFile" type="file" accept="image/*">
+                        <img id="teamPhotoPreviewAdmin" class="photo-preview" alt="Team preview">
+                    </div>
+                </div>
+                <button id="addTeam" class="btn btn-primary">Add Team Member</button>
+                <div id="teamListAdmin" class="list"></div>
+            </section>
+
+            <section class="card panel-card">
+                <h2>Social Links (Admin)</h2>
+                <div class="quick-grid">
+                    <div>
+                        <label for="socialInstagramAdmin">Instagram</label>
+                        <input id="socialInstagramAdmin" placeholder="Instagram URL">
+                    </div>
+                    <div>
+                        <label for="socialFacebookAdmin">Facebook</label>
+                        <input id="socialFacebookAdmin" placeholder="Facebook URL">
+                    </div>
+                    <div>
+                        <label for="socialXAdmin">X</label>
+                        <input id="socialXAdmin" placeholder="X URL">
+                    </div>
+                    <div>
+                        <label for="socialLinkedInAdmin">LinkedIn</label>
+                        <input id="socialLinkedInAdmin" placeholder="LinkedIn URL">
+                    </div>
+                </div>
+                <button id="saveSocials" class="btn btn-primary">Save Social Links</button>
+            </section>
+        </main>
+    </div>
+</div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>
