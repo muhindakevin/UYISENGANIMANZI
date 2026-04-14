@@ -6,6 +6,7 @@ function showTab(id) {
     const targetTab = document.getElementById(id);
     if (targetTab) targetTab.classList.add("active");
     closeMenuDropdowns();
+    closeHamburgerMenu();
 }
 
 function toggleAboutMenu(event) {
@@ -34,9 +35,20 @@ function closeProgramsMenu() {
     if (programsMenu) programsMenu.classList.remove("open");
 }
 
-function closeMenuDropdowns() {
-    closeAboutMenu();
-    closeProgramsMenu();
+function toggleHamburgerMenu() {
+    const hamburger = document.getElementById("hamburger");
+    const navMenu = document.getElementById("nav-menu");
+    if (!hamburger || !navMenu) return;
+    hamburger.classList.toggle("active");
+    navMenu.classList.toggle("active");
+    closeMenuDropdowns();
+}
+
+function closeHamburgerMenu() {
+    const hamburger = document.getElementById("hamburger");
+    const navMenu = document.getElementById("nav-menu");
+    if (hamburger) hamburger.classList.remove("active");
+    if (navMenu) navMenu.classList.remove("active");
 }
 
 function openAboutSection(section) {
@@ -205,9 +217,14 @@ async function loadSiteData() {
 document.addEventListener("click", (event) => {
     const aboutMenu = document.getElementById("aboutMenu");
     const programsMenu = document.getElementById("programsMenu");
+    const hamburger = document.getElementById("hamburger");
+    const navMenu = document.getElementById("nav-menu");
     const clickedAbout = aboutMenu && aboutMenu.contains(event.target);
     const clickedPrograms = programsMenu && programsMenu.contains(event.target);
+    const clickedHamburger = hamburger && hamburger.contains(event.target);
+    const clickedNavMenu = navMenu && navMenu.contains(event.target);
     if (!clickedAbout && !clickedPrograms) closeMenuDropdowns();
+    if (!clickedHamburger && !clickedNavMenu) closeHamburgerMenu();
 });
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -219,4 +236,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderNews();
     renderSocialLinks();
     wireHomeProgramLinks();
+
+    // Hamburger menu
+    const hamburger = document.getElementById("hamburger");
+    if (hamburger) {
+        hamburger.addEventListener("click", toggleHamburgerMenu);
+    }
 });

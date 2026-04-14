@@ -15,7 +15,12 @@
         <img src="IMAGES/logo.png" onclick="showTab('home')">
     </div>
     <nav>
-        <ul>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul id="nav-menu">
             <li onclick="showTab('home')">Home</li>
             <li class="menu-dropdown" id="aboutMenu">
                 <button type="button" class="menu-dropdown-toggle" onclick="toggleAboutMenu(event)">
@@ -71,11 +76,32 @@
 
     <!-- ================= PARTNERS ================= -->
     <div class="partners">
-        <h2>Our Partners</h2>
-        <div class="partner-logos">
-            <img src="IMAGES/partners/p1.png" alt="Partner 1">
-            <img src="IMAGES/partners/p2.png" alt="Partner 2">
-            <img src="IMAGES/partners/p3.png" alt="Partner 3">
+        <div class="partners-header">
+            <h2>Our Partners</h2>
+            <p>We collaborate with organizations and individuals who share our vision for a better future for children and families in Rwanda.</p>
+        </div>
+        <div class="partners-slider">
+            <div class="partners-track">
+                <div class="partner-item">
+                    <img src="IMAGES/partners/p1.jpg" alt="Partner 1">
+                </div>
+                <div class="partner-item">
+                    <img src="IMAGES/partners/p2.jpg" alt="Partner 2">
+                </div>
+                <div class="partner-item">
+                    <img src="IMAGES/partners/p3.png" alt="Partner 3">
+                </div>
+                <!-- Duplicate for seamless loop -->
+                <div class="partner-item">
+                    <img src="IMAGES/partners/p1.jpg" alt="Partner 1">
+                </div>
+                <div class="partner-item">
+                    <img src="IMAGES/partners/p2.jpg" alt="Partner 2">
+                </div>
+                <div class="partner-item">
+                    <img src="IMAGES/partners/p3.png" alt="Partner 3">
+                </div>
+            </div>
         </div>
     </div>
 
