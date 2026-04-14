@@ -74,7 +74,7 @@ function renderTeamMembers() {
     const container = document.getElementById("teamMembersGrid");
     if (!container) return;
     const members = siteData?.teamMembers || [];
-    const fallbackImage = "images/logo.png";
+    const fallbackImage = "IMAGES/logo.png";
     container.innerHTML = members.map((member) => `
         <div class="team-member-card">
             <img class="team-member-photo" src="${member.photo || fallbackImage}" alt="${member.name || "Team Member"}" onerror="this.src='${fallbackImage}'">

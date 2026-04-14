@@ -154,11 +154,11 @@ nav li.donate-btn:hover {
 
 /* Rolling background photos (cycles through all four) */
 @keyframes fadeBg {
-    0%   { background-image: url('../images/office.jpg'); }
-    25%  { background-image: url('../images/program1.jpg'); }
-    50%  { background-image: url('../images/program22.jpg'); }
-    75%  { background-image: url('../images/office2.jpg'); }
-    100% { background-image: url('../images/office.jpg'); }
+    0%   { background-image: url('../IMAGES/office.jpg'); }
+    25%  { background-image: url('../IMAGES/program1.jpg'); }
+    50%  { background-image: url('../IMAGES/program22.jpg'); }
+    75%  { background-image: url('../IMAGES/office2.jpg'); }
+    100% { background-image: url('../IMAGES/office.jpg'); }
 }
 
 /* Gradient overlay — photos stay visible, text stays readable */
