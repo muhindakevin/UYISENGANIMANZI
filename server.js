@@ -1,29 +1,88 @@
 const express = require("express");
-const fs = require("fs");
-const path = require("path");
+const mongoose = require("mongoose");
 const crypto = require("crypto");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const DATA_FILE = path.join(__dirname, "data", "content.json");
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/uyisenganimanzi";
 
-const users = [
-  { username: "admin", password: "admin123", role: "admin" },
-  { username: "writer", password: "writer123", role: "writer" }
-];
+mongoose.connect(MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(async () => {
+  console.log("Connected to MongoDB");
+  // Seed initial data
+  const userCount = await User.countDocuments();
+  if (userCount === 0) {
+    await User.create([
+      { username: "admin", password: "admin123", role: "admin" },
+      { username: "writer", password: "writer123", role: "writer" }
+    ]);
+    console.log("Seeded initial users");
+  }
+})
+  .catch(err => console.error("MongoDB connection error:", err));
+
+const userSchema = new mongoose.Schema({
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  role: { type: String, required: true }
+});
+
+const contentSchema = new mongoose.Schema({
+  identity: {
+    title: String,
+    description: String,
+    photo: String
+  },
+  socials: {
+    x: String,
+    instagram: String,
+    linkedin: String,
+    facebook: String
+  },
+  programs: [{
+    id: { type: String, required: true },
+    name: String,
+    description: String
+  }],
+  news: [{
+    id: { type: String, required: true },
+    title: String,
+    content: String,
+    date: String,
+    programId: String
+  }],
+  teamMembers: [{
+    id: { type: String, required: true },
+    name: String,
+    title: String,
+    contact: String,
+    photo: String
+  }]
+});
+
+const User = mongoose.model("User", userSchema);
+const Content = mongoose.model("Content", contentSchema);
 
 const sessions = new Map();
 
 app.use(express.json({ limit: "5mb" }));
 app.use(express.static(__dirname));
 
-function readContent() {
-  const raw = fs.readFileSync(DATA_FILE, "utf8");
-  return JSON.parse(raw);
-}
-
-function writeContent(data) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), "utf8");
+async function getContent() {
+  let content = await Content.findOne();
+  if (!content) {
+    content = new Content({
+      identity: { title: "UYISENGA NI IMANZI", description: "Non-profit organization", photo: "" },
+      socials: { x: "", instagram: "", linkedin: "", facebook: "" },
+      programs: [],
+      news: [],
+      teamMembers: []
+    });
+    await content.save();
+  }
+  return content;
 }
 
 function authRequired(req, res, next) {
@@ -44,80 +103,84 @@ function roleRequired(...allowed) {
   };
 }
 
-app.post("/api/auth/login", (req, res) => {
+app.post("/api/auth/login", async (req, res) => {
   const { username, password } = req.body || {};
-  const user = users.find((u) => u.username === username && u.password === password);
+  const user = await User.findOne({ username, password });
   if (!user) return res.status(401).json({ message: "Invalid credentials" });
   const token = crypto.randomBytes(24).toString("hex");
   sessions.set(token, { username: user.username, role: user.role });
   res.json({ token, role: user.role, username: user.username });
 });
 
-app.get("/api/public/content", (req, res) => {
-  res.json(readContent());
+app.get("/api/public/content", async (req, res) => {
+  const content = await getContent();
+  res.json(content);
 });
 
-app.get("/api/public/news", (req, res) => {
+app.get("/api/public/news", async (req, res) => {
   const { programId } = req.query;
-  const data = readContent();
-  const news = programId ? data.news.filter((n) => n.programId === programId) : data.news;
+  const content = await getContent();
+  const news = programId ? content.news.filter((n) => n.programId === programId) : content.news;
   res.json(news);
 });
 
-app.get("/api/admin/content", authRequired, (req, res) => {
-  res.json(readContent());
+app.get("/api/admin/content", authRequired, async (req, res) => {
+  const content = await getContent();
+  res.json(content);
 });
 
-app.put("/api/admin/identity", authRequired, roleRequired("admin"), (req, res) => {
-  const data = readContent();
-  data.identity = { ...data.identity, ...req.body };
-  writeContent(data);
-  res.json(data.identity);
+app.put("/api/admin/identity", authRequired, roleRequired("admin"), async (req, res) => {
+  const content = await getContent();
+  content.identity = { ...content.identity, ...req.body };
+  await content.save();
+  res.json(content.identity);
 });
 
-app.put("/api/admin/socials", authRequired, roleRequired("admin"), (req, res) => {
-  const data = readContent();
-  data.socials = { ...data.socials, ...req.body };
-  writeContent(data);
-  res.json(data.socials);
+app.put("/api/admin/socials", authRequired, roleRequired("admin"), async (req, res) => {
+  const content = await getContent();
+  content.socials = { ...content.socials, ...req.body };
+  await content.save();
+  res.json(content.socials);
 });
 
-app.get("/api/admin/programs", authRequired, (req, res) => {
-  res.json(readContent().programs);
+app.get("/api/admin/programs", authRequired, async (req, res) => {
+  const content = await getContent();
+  res.json(content.programs);
 });
 
-app.post("/api/admin/programs", authRequired, roleRequired("admin"), (req, res) => {
-  const data = readContent();
+app.post("/api/admin/programs", authRequired, roleRequired("admin"), async (req, res) => {
+  const content = await getContent();
   const payload = req.body || {};
   const id = payload.id || crypto.randomBytes(4).toString("hex");
-  data.programs.push({ id, name: payload.name || "Program", description: payload.description || "" });
-  writeContent(data);
-  res.json(data.programs);
+  content.programs.push({ id, name: payload.name || "Program", description: payload.description || "" });
+  await content.save();
+  res.json(content.programs);
 });
 
-app.put("/api/admin/programs/:id", authRequired, roleRequired("admin"), (req, res) => {
-  const data = readContent();
-  const idx = data.programs.findIndex((p) => p.id === req.params.id);
-  if (idx === -1) return res.status(404).json({ message: "Program not found" });
-  data.programs[idx] = { ...data.programs[idx], ...req.body, id: data.programs[idx].id };
-  writeContent(data);
-  res.json(data.programs[idx]);
+app.put("/api/admin/programs/:id", authRequired, roleRequired("admin"), async (req, res) => {
+  const content = await getContent();
+  const program = content.programs.id(req.params.id);
+  if (!program) return res.status(404).json({ message: "Program not found" });
+  Object.assign(program, req.body);
+  await content.save();
+  res.json(program);
 });
 
-app.delete("/api/admin/programs/:id", authRequired, roleRequired("admin"), (req, res) => {
-  const data = readContent();
-  data.programs = data.programs.filter((p) => p.id !== req.params.id);
-  data.news = data.news.filter((n) => n.programId !== req.params.id);
-  writeContent(data);
+app.delete("/api/admin/programs/:id", authRequired, roleRequired("admin"), async (req, res) => {
+  const content = await getContent();
+  content.programs = content.programs.filter((p) => p.id !== req.params.id);
+  content.news = content.news.filter((n) => n.programId !== req.params.id);
+  await content.save();
   res.json({ ok: true });
 });
 
-app.get("/api/admin/news", authRequired, (req, res) => {
-  res.json(readContent().news);
+app.get("/api/admin/news", authRequired, async (req, res) => {
+  const content = await getContent();
+  res.json(content.news);
 });
 
-app.post("/api/admin/news", authRequired, roleRequired("admin", "writer"), (req, res) => {
-  const data = readContent();
+app.post("/api/admin/news", authRequired, roleRequired("admin", "writer"), async (req, res) => {
+  const content = await getContent();
   const payload = req.body || {};
   const item = {
     id: payload.id || crypto.randomBytes(4).toString("hex"),
@@ -126,58 +189,59 @@ app.post("/api/admin/news", authRequired, roleRequired("admin", "writer"), (req,
     date: payload.date || new Date().toISOString().slice(0, 10),
     programId: payload.programId || ""
   };
-  data.news.unshift(item);
-  writeContent(data);
-  res.json(data.news);
+  content.news.unshift(item);
+  await content.save();
+  res.json(content.news);
 });
 
-app.put("/api/admin/news/:id", authRequired, roleRequired("admin", "writer"), (req, res) => {
-  const data = readContent();
-  const idx = data.news.findIndex((n) => n.id === req.params.id);
-  if (idx === -1) return res.status(404).json({ message: "News not found" });
-  data.news[idx] = { ...data.news[idx], ...req.body, id: data.news[idx].id };
-  writeContent(data);
-  res.json(data.news[idx]);
+app.put("/api/admin/news/:id", authRequired, roleRequired("admin", "writer"), async (req, res) => {
+  const content = await getContent();
+  const newsItem = content.news.id(req.params.id);
+  if (!newsItem) return res.status(404).json({ message: "News not found" });
+  Object.assign(newsItem, req.body);
+  await content.save();
+  res.json(newsItem);
 });
 
-app.delete("/api/admin/news/:id", authRequired, roleRequired("admin", "writer"), (req, res) => {
-  const data = readContent();
-  data.news = data.news.filter((n) => n.id !== req.params.id);
-  writeContent(data);
+app.delete("/api/admin/news/:id", authRequired, roleRequired("admin", "writer"), async (req, res) => {
+  const content = await getContent();
+  content.news = content.news.filter((n) => n.id !== req.params.id);
+  await content.save();
   res.json({ ok: true });
 });
 
-app.get("/api/admin/team", authRequired, (req, res) => {
-  res.json(readContent().teamMembers);
+app.get("/api/admin/team", authRequired, async (req, res) => {
+  const content = await getContent();
+  res.json(content.teamMembers);
 });
 
-app.post("/api/admin/team", authRequired, roleRequired("admin"), (req, res) => {
-  const data = readContent();
+app.post("/api/admin/team", authRequired, roleRequired("admin"), async (req, res) => {
+  const content = await getContent();
   const payload = req.body || {};
-  data.teamMembers.push({
+  content.teamMembers.push({
     id: payload.id || crypto.randomBytes(4).toString("hex"),
     name: payload.name || "Team Member",
     title: payload.title || "Role",
     contact: payload.contact || "",
     photo: payload.photo || ""
   });
-  writeContent(data);
-  res.json(data.teamMembers);
+  await content.save();
+  res.json(content.teamMembers);
 });
 
-app.put("/api/admin/team/:id", authRequired, roleRequired("admin"), (req, res) => {
-  const data = readContent();
-  const idx = data.teamMembers.findIndex((m) => m.id === req.params.id);
-  if (idx === -1) return res.status(404).json({ message: "Team member not found" });
-  data.teamMembers[idx] = { ...data.teamMembers[idx], ...req.body, id: data.teamMembers[idx].id };
-  writeContent(data);
-  res.json(data.teamMembers[idx]);
+app.put("/api/admin/team/:id", authRequired, roleRequired("admin"), async (req, res) => {
+  const content = await getContent();
+  const member = content.teamMembers.id(req.params.id);
+  if (!member) return res.status(404).json({ message: "Team member not found" });
+  Object.assign(member, req.body);
+  await content.save();
+  res.json(member);
 });
 
-app.delete("/api/admin/team/:id", authRequired, roleRequired("admin"), (req, res) => {
-  const data = readContent();
-  data.teamMembers = data.teamMembers.filter((m) => m.id !== req.params.id);
-  writeContent(data);
+app.delete("/api/admin/team/:id", authRequired, roleRequired("admin"), async (req, res) => {
+  const content = await getContent();
+  content.teamMembers = content.teamMembers.filter((m) => m.id !== req.params.id);
+  await content.save();
   res.json({ ok: true });
 });
 
