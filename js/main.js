@@ -39,12 +39,36 @@ function toggleHamburgerMenu() {
     const hamburger = document.getElementById("hamburger");
     const navMenu = document.getElementById("nav-menu");
     if (!hamburger || !navMenu) return;
+    const isOpen = !navMenu.classList.contains("active");
     hamburger.classList.toggle("active");
     navMenu.classList.toggle("active");
+    hamburger.setAttribute("aria-expanded", String(isOpen));
+    document.body.classList.toggle("menu-open", isOpen);
     closeMenuDropdowns();
 }
 
 function closeHamburgerMenu() {
+    const hamburger = document.getElementById("hamburger");
+    const navMenu = document.getElementById("nav-menu");
+    if (hamburger) {
+        hamburger.classList.remove("active");
+        hamburger.setAttribute("aria-expanded", "false");
+    }
+    if (navMenu) {
+        navMenu.classList.remove("active");
+    }
+    document.body.classList.remove("menu-open");
+}
+
+function showTab(id) {
+    document.querySelectorAll(".tab").forEach((tab) => tab.classList.remove("active"));
+    const targetTab = document.getElementById(id);
+    if (targetTab) targetTab.classList.add("active");
+    closeMenuDropdowns();
+    closeHamburgerMenu();
+}
+
+function toggleAboutMenu(event) {
     const hamburger = document.getElementById("hamburger");
     const navMenu = document.getElementById("nav-menu");
     if (hamburger) hamburger.classList.remove("active");
